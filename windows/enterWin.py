@@ -1,6 +1,7 @@
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import *
-from windows.AdminWin import AdminWin
+from windows.admin.authorizationWin import AuthorizationWin
+from windows.client.clientAuthorizationWin import ClientAuthorizationWin
 
 
 class EnterWin(QWidget):
@@ -9,33 +10,33 @@ class EnterWin(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(700, 700, 500, 150)
-        self.setWindowTitle('Вход')
+        self.resize(500, 100)
         self.setFixedSize(self.width(), self.height())
         self.setWindowIcon(QIcon('logo_pictures/window_icon.png'))
+        self.setWindowTitle('Магазин книг')
 
-        login = QLabel('Введите логин:')
-        self.login_line = QLineEdit()
-        password = QLabel('Введите пароль:')
-        self.password_line = QLineEdit()
-        self.enter_btn = QPushButton('Войти')
-        self.enter_btn.clicked.connect(self.enter)
+        self.client_enter_btn = QPushButton('Войти как клиент')
+        self.client_enter_btn.clicked.connect(self.show_client_win)
 
+        self.admin_enter_btn = QPushButton('Войти как администратор')
+        self.admin_enter_btn.clicked.connect(self.show_admin_win)
 
-        main_l = QVBoxLayout()
-        main_l.addWidget(login)
-        main_l.addWidget(self.login_line)
-        main_l.addWidget(password)
-        main_l.addWidget(self.password_line)
-        main_l.addWidget(self.enter_btn)
-        self.setLayout(main_l)
+        self.main_l = QVBoxLayout()
+        self.main_l.addStretch()
+        self.main_l.addWidget(self.client_enter_btn)
+        self.main_l.addWidget(self.admin_enter_btn)
+        self.main_l.addStretch()
+        self.setLayout(self.main_l)
 
-    def enter(self):
-        self.login = self.login_line.text()
-        self.password = self.password_line.text()
-        if self.login == 'Вова' and self.password == '123':
-            self.admin_win = AdminWin()
-            self.admin_win.show()
-            self.close()
-        else:
-            QMessageBox.information(self, 'Инфо', 'Логин или пароль неверны, попробуйте ещё раз.')
+    def show_client_win(self):
+        self.client_authorization_win = ClientAuthorizationWin(self)
+        self.client_authorization_win.show()
+        self.hide()
+
+    def show_admin_win(self):
+        self.enter_win = AuthorizationWin(self)
+        self.enter_win.show()
+        self.hide()
+
+    def closeEvent(self, event):
+        QApplication.quit()

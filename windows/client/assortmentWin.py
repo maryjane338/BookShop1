@@ -107,7 +107,7 @@ class AssortmentWin(QWidget):
         scaled_pixmap3 = self.pixmap.scaled(150, 200)
         self.pixmap.load('book_pictures/3Friends.jpg')
         scaled_pixmap4 = self.pixmap.scaled(150, 200)
-        self.pixmap.load('book_pictures/adventure.jpeg')
+        self.pixmap.load("book_pictures/adventure.jpeg")
         scaled_pixmap5 = self.pixmap.scaled(150, 200)
         self.pixmap.load("book_pictures/DeadSouls.jpg")
         scaled_pixmap6 = self.pixmap.scaled(150, 200)

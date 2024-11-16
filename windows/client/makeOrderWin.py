@@ -8,11 +8,13 @@ class MakeOrderWin(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(1100, 100, 500, 370)
+        self.setGeometry(1100, 100, 500, 420)
         self.setFixedSize(self.width(), self.height())
         self.setWindowIcon(QIcon('logo_pictures/window_icon.png'))
         self.setWindowTitle('Заказ')
 
+        user_name_label = QLabel('Ваш логин:')
+        self.user_name_input = QLineEdit()
         book_name_label = QLabel('Название книги:')
         self.book_name_input = QLineEdit()
         phone_number_label = QLabel('Ваш номер телефона:')
@@ -21,11 +23,11 @@ class MakeOrderWin(QWidget):
         self.user_address = QLineEdit()
         self.payment_method = QComboBox()
         payment_method_label = QLabel('Выберите способ оплаты:')
-        self.payment_method.addItems(['-', 'Наличность', 'Дебетовая крата', 'Криптовалюта'])
+        self.payment_method.addItems(['-', 'Наличные', 'Дебетовая крата', 'Криптовалюта'])
         self.payment_method.currentIndexChanged.connect(self.cash_payment)
 
         self.cash_info_label = QLabel()
-        self.make_order_btn = QPushButton('Сделать заказ')
+        self.make_order_btn = QPushButton('Создать заказ')
         self.make_order_btn.clicked.connect(self.make_order)
         self.card_number_input = QLineEdit()
         self.cvv_input = QLineEdit()
@@ -33,6 +35,8 @@ class MakeOrderWin(QWidget):
         self.crypto_wallet_id = QLineEdit()
 
         self.main_l = QVBoxLayout()
+        self.main_l.addWidget(user_name_label)
+        self.main_l.addWidget(self.user_name_input)
         self.main_l.addWidget(book_name_label)
         self.main_l.addWidget(self.book_name_input)
         self.main_l.addWidget(phone_number_label)
@@ -53,17 +57,17 @@ class MakeOrderWin(QWidget):
                 self.cvv_input.setVisible(False)
                 self.main_l.removeWidget(self.card_owner_input)
                 self.card_owner_input.setVisible(False)
-                self.cash_info_label.setText('Деньги возьмёт курьер')
+                self.cash_info_label.setText('Оплата будет произведена через курьера')
             elif self.cash_info_label.text() == 'Введите реквизиты вашего кошелька':
                 self.main_l.removeWidget(self.crypto_wallet_id)
                 self.crypto_wallet_id.setVisible(False)
-                self.cash_info_label.setText('Деньги возьмёт курьер')
+                self.cash_info_label.setText('Оплата будет произведена через курьера')
             else:
-                self.cash_info_label.setText('Деньги возьмёт курьер')
+                self.cash_info_label.setText('Оплата будет произведена через курьера')
                 self.main_l.addWidget(self.cash_info_label)
                 self.main_l.addWidget(self.make_order_btn)
         elif i == 2:
-            if self.cash_info_label.text() == 'Деньги возьмёт курьер':
+            if self.cash_info_label.text() == 'Оплата будет произведена через курьера':
                 self.card_number_input.setVisible(True)
                 self.cvv_input.setVisible(True)
                 self.card_owner_input.setVisible(True)
@@ -100,7 +104,7 @@ class MakeOrderWin(QWidget):
                 self.main_l.addWidget(self.card_owner_input)
                 self.main_l.addWidget(self.make_order_btn)
         elif i == 3:
-            if self.cash_info_label.text() == 'Деньги возьмёт курьер':
+            if self.cash_info_label.text() == 'Оплата будет произведена через курьера':
                 self.crypto_wallet_id.setVisible(True)
                 self.cash_info_label.setText('Введите реквизиты вашего кошелька')
                 self.crypto_wallet_id.setPlaceholderText("ID: 00000000")

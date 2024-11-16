@@ -1,11 +1,11 @@
 from PyQt6.QtWidgets import QApplication
-from windows.mainWin import MainWin
+from windows.enterWin import EnterWin
 import sys
 
 
 def main():
     app = QApplication([])
-    win = MainWin()
+    win = EnterWin()
     win.show()
     sys.exit(app.exec())
 
