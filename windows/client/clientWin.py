@@ -37,6 +37,7 @@ class ClientWin(QWidget):
 
         self.win1 = 0
         self.win2 = 0
+        self.win3 = 0
 
         self.main_l = QVBoxLayout()
         self.main_l.addWidget(self.label)
@@ -60,19 +61,24 @@ class ClientWin(QWidget):
     def show_check_login_win(self):
         self.orders_win = ClientOrdersWin()
         self.orders_win.show()
+        self.win3 = 1
 
     def back_to_enter(self):
-        if self.win1 == 1 and self.win2 == 1:
+        if self.win1 == 1 and self.win2 == 1 and self.win3 == 1:
             self.assortment.close()
             self.make_order_win.close()
+            self.orders_win.close()
             self.hide()
-        elif self.win1 == 0 and self.win2 == 0:
+        elif self.win1 == 0 and self.win2 == 0 and self.win3 == 0:
             self.hide()
         elif self.win1 == 1:
             self.assortment.close()
             self.hide()
         elif self.win2 == 1:
             self.make_order_win.close()
+            self.hide()
+        elif self.win3 == 1:
+            self.orders_win.close()
             self.hide()
         self.enter_win.show()
 

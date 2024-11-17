@@ -10,7 +10,7 @@ class EnterWin(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.resize(500, 100)
+        self.resize(300, 100)
         self.setFixedSize(self.width(), self.height())
         self.setWindowIcon(QIcon('logo_pictures/window_icon.png'))
         self.setWindowTitle('Магазин книг')

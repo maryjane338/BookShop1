@@ -24,7 +24,7 @@ class MakeOrderWin(QWidget):
         self.payment_method = QComboBox()
         payment_method_label = QLabel('Выберите способ оплаты:')
         self.payment_method.addItems(['-', 'Наличные', 'Дебетовая крата', 'Криптовалюта'])
-        self.payment_method.currentIndexChanged.connect(self.cash_payment)
+        self.payment_method.currentIndexChanged.connect(self.payment)
 
         self.cash_info_label = QLabel()
         self.make_order_btn = QPushButton('Создать заказ')
@@ -48,7 +48,7 @@ class MakeOrderWin(QWidget):
         self.main_l.addStretch()
         self.setLayout(self.main_l)
 
-    def cash_payment(self, i):
+    def payment(self, i):
         if i == 1:
             if self.cash_info_label.text() == 'Введите данные карты':
                 self.main_l.removeWidget(self.card_number_input)
@@ -131,4 +131,5 @@ class MakeOrderWin(QWidget):
                 self.main_l.addWidget(self.make_order_btn)
 
     def make_order(self):
-        pass
+        QMessageBox.information(self, 'Заказ', 'Ваш заказ успешно создан!')
+        self.close()

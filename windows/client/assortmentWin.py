@@ -8,7 +8,7 @@ class AssortmentWin(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(100, 100, 450, 900)
+        self.setGeometry(370, 100, 450, 870)
         self.setFixedSize(self.width(), self.height())
         self.setWindowIcon(QIcon('logo_pictures/window_icon.png'))
         self.setWindowTitle('Ассортимент')
@@ -20,12 +20,12 @@ class AssortmentWin(QWidget):
         self.label5 = QLabel()
         self.label6 = QLabel()
 
-        self.name_label1 = QLabel('Над пропастью во ржи\nДэвид. Сэллинджер\n800 руб.')
-        self.name_label2 = QLabel('1984\nДжордж. Оруэл\n1000 руб.')
-        self.name_label3 = QLabel('Преступление и наказание\nФёдор Достоевский\n1500 руб.')
-        self.name_label4 = QLabel('Три товарища\nЭрих Мария Ремарк\n400 руб.')
-        self.name_label5 = QLabel('Приключения Гекльберри Фина\nМарк Твен\n1200 руб.')
-        self.name_label6 = QLabel('Мёртвые Души\nНиколай Гоголь\n500 руб.')
+        self.name_label1 = QLabel('Над пропастью во ржи\nДж. Д. Сэллинджер\n800 руб.')
+        self.name_label2 = QLabel('1984\nДж. Оруэл\n1000 руб.')
+        self.name_label3 = QLabel('Преступление и наказание\nФ. Достоевский\n1500 руб.')
+        self.name_label4 = QLabel('Три товарища\nЭ. М. Ремарк\n400 руб.')
+        self.name_label5 = QLabel('Приключения Гекльберри Финна\nМ. Твен\n1200 руб.')
+        self.name_label6 = QLabel('Мёртвые Души\nН. Гоголь\n500 руб.')
 
         self.pixmap = QPixmap()
 
@@ -93,7 +93,7 @@ class AssortmentWin(QWidget):
 
     def button_click1(self):
         self.name_label1.setText('Над пропастью во ржи\nДж. Д. Сэллинджер\n800 руб.')
-        self.name_label2.setText('1984\nД. Оруэл\n1000 руб.')
+        self.name_label2.setText('1984\nДж. Оруэл\n1000 руб.')
         self.name_label3.setText('Преступление и наказание\nФ. Достоевский\n1500 руб.')
         self.name_label4.setText('Три товарища\nЭ. М. Ремарк\n400 руб.')
         self.name_label5.setText('Приключения Гекльберри Финна\nМ. Твен\n1200 руб.')

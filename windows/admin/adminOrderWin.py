@@ -9,7 +9,7 @@ class AdminOrderWin(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Заказы')
-        self.setGeometry(100, 300, 750, 400)
+        self.setGeometry(50, 300, 750, 400)
         self.setFixedSize(self.width(), self.height())
         self.setWindowIcon(QIcon('logo_pictures/window_icon.png'))
 
