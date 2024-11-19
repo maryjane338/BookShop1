@@ -2,6 +2,7 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import *
 from windows.admin.adminOrderWin import AdminOrderWin
 from windows.admin.booksWin import BooksWin
+from windows.admin.usersWin import UsersWin
 
 
 class AdminWin(QWidget):
@@ -22,6 +23,9 @@ class AdminWin(QWidget):
         self.books_btn = QPushButton('Книги')
         self.books_btn.clicked.connect(self.show_books_win)
 
+        self.users_btn = QPushButton('Клиенты')
+        self.users_btn.clicked.connect(self.show_users_win)
+
         self.back_enter_btn = QPushButton('Вернуться ко входу')
         self.back_enter_btn.clicked.connect(self.back_to_enter)
 
@@ -29,12 +33,14 @@ class AdminWin(QWidget):
         self.main_l.addStretch()
         self.main_l.addWidget(self.all_orders_btn)
         self.main_l.addWidget(self.books_btn)
+        self.main_l.addWidget(self.users_btn)
         self.main_l.addStretch()
         self.main_l.addWidget(self.back_enter_btn)
         self.setLayout(self.main_l)
 
         self.win1 = 0
         self.win2 = 0
+        self.win3 = 0
 
     def show_books_win(self):
         self.books_win = BooksWin()
@@ -46,18 +52,27 @@ class AdminWin(QWidget):
         self.adm_orders_win.show()
         self.win2 = 1
 
+    def show_users_win(self):
+        self.users_win = UsersWin()
+        self.users_win.show()
+        self.win3 = 1
+
     def back_to_enter(self):
-        if self.win1 == 1 and self.win2 == 1:
+        if self.win1 == 1 and self.win2 == 1 and self.win3 == 1:
             self.books_win.close()
             self.adm_orders_win.close()
+            self.users_win.close()
             self.hide()
-        elif self.win1 == 0 and self.win2 == 0:
+        elif self.win1 == 0 and self.win2 == 0 and self.win3 == 0:
             self.hide()
         elif self.win1 == 1:
             self.books_win.close()
             self.hide()
         elif self.win2 == 1:
             self.adm_orders_win.close()
+            self.hide()
+        elif self.win3 == 1:
+            self.users_win.close()
             self.hide()
         self.enter_win.show()
 

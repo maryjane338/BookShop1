@@ -14,6 +14,7 @@ class ClientOrdersWin(QWidget):
         self.setWindowTitle('Заказы')
 
         self.cancel_btn = QPushButton('Отменить заказ')
+        self.cancel_btn.clicked.connect(self.cancel_order)
 
         orders = [
             ['2', 'Идиот', 'ул. Ленина 22, кв. 57', 'Карта', '02.12.2024']
@@ -35,3 +36,8 @@ class ClientOrdersWin(QWidget):
         v_l.addWidget(self.cancel_btn)
         main_l.addWidget(view)
         self.setLayout(main_l)
+
+    def cancel_order(self):
+        QMessageBox.warning(self, 'Подтверждение', 'Вы уверены, что хотите отменить заказ?',
+                            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+
