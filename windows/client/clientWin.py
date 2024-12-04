@@ -6,9 +6,10 @@ from windows.client.makeOrderWin import MakeOrderWin
 
 
 class ClientWin(QWidget):
-    def __init__(self, enter_win):
+    def __init__(self, enter_win, user):
         super().__init__()
         self.enter_win = enter_win
+        self.user = user
         self.initUI()
 
     def initUI(self):
@@ -54,12 +55,12 @@ class ClientWin(QWidget):
         self.win1 = 1
 
     def show_make_order_win(self):
-        self.make_order_win = MakeOrderWin()
+        self.make_order_win = MakeOrderWin(self.user)
         self.make_order_win.show()
         self.win2 = 1
 
     def show_check_login_win(self):
-        self.orders_win = ClientOrdersWin()
+        self.orders_win = ClientOrdersWin(self.user)
         self.orders_win.show()
         self.win3 = 1
 
@@ -71,14 +72,17 @@ class ClientWin(QWidget):
             self.hide()
         elif self.win1 == 0 and self.win2 == 0 and self.win3 == 0:
             self.hide()
-        elif self.win1 == 1:
+        elif self.win1 == 1 and self.win2 == 1:
             self.assortment.close()
-            self.hide()
-        elif self.win2 == 1:
             self.make_order_win.close()
             self.hide()
-        elif self.win3 == 1:
+        elif self.win2 == 1 and self.win3 == 1:
+            self.make_order_win.close()
             self.orders_win.close()
+            self.hide()
+        elif self.win3 == 1 and self.win1 == 1:
+            self.orders_win.close()
+            self.assortment.close()
             self.hide()
         self.enter_win.show()
 

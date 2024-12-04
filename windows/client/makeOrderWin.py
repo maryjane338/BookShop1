@@ -1,10 +1,13 @@
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import *
+from database import SessionLocal, init_db
+from services.book_service import OrderService, BookService
 
 
 class MakeOrderWin(QWidget):
-    def __init__(self):
+    def __init__(self, user):
         super().__init__()
+        self.user = user
         self.initUI()
 
     def initUI(self):
@@ -49,6 +52,7 @@ class MakeOrderWin(QWidget):
         self.setLayout(self.main_l)
 
     def payment(self, i):
+        self.i = i
         if i == 1:
             if self.cash_info_label.text() == 'Введите данные карты':
                 self.main_l.removeWidget(self.card_number_input)
@@ -131,5 +135,17 @@ class MakeOrderWin(QWidget):
                 self.main_l.addWidget(self.make_order_btn)
 
     def make_order(self):
+        init_db()
+        db = SessionLocal()
+
+        if self.i == 1:
+            payment = 2
+        else:
+            payment = 1
+
+        order_service = OrderService(db)
+        book_service = BookService(db)
+        book_id = book_service.select_book_query(self.book_name_input.text())
+        order_service.add_order(client_name=self.user, book_name=book_id, address=self.user_address.text(), payment=payment, delivery_date='30.01.2025')
         QMessageBox.information(self, 'Заказ', 'Ваш заказ успешно создан!')
         self.close()

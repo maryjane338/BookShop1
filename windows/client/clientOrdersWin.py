@@ -1,10 +1,13 @@
 from PyQt6.QtGui import QIcon, QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import *
+from database import SessionLocal, init_db
+from services.book_service import OrderService
 
 
 class ClientOrdersWin(QWidget):
-    def __init__(self):
+    def __init__(self, user):
         super().__init__()
+        self.user = user
         self.initUI()
 
     def initUI(self):
@@ -14,16 +17,18 @@ class ClientOrdersWin(QWidget):
         self.setWindowTitle('Заказы')
 
         self.cancel_btn = QPushButton('Отменить заказ')
-        self.cancel_btn.clicked.connect(self.cancel_order)
 
-        orders = [
-            ['2', 'Идиот', 'ул. Ленина 22, кв. 57', 'Карта', '02.12.2024']
-        ]
+        init_db()
+        db = SessionLocal()
+
+        order_service = OrderService(db)
+
+        orders = order_service.load_orders_for_user(self.user)
 
         view = QTableView()
         model = QStandardItemModel()
         model.setHorizontalHeaderLabels(
-            ['Заказ №', 'Книга', 'Адрес доставки', 'Способ оплаты', 'Дата доставки'])
+            ['Заказ №', 'Книга', 'Адрес доставки', 'Статус оплаты', 'Дата доставки'])
         view.setModel(model)
 
         for order in orders:
@@ -36,8 +41,3 @@ class ClientOrdersWin(QWidget):
         v_l.addWidget(self.cancel_btn)
         main_l.addWidget(view)
         self.setLayout(main_l)
-
-    def cancel_order(self):
-        QMessageBox.warning(self, 'Подтверждение', 'Вы уверены, что хотите отменить заказ?',
-                            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-

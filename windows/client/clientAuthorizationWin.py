@@ -1,5 +1,8 @@
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import *
+
+from database import init_db, SessionLocal
+from services.book_service import ClientService
 from windows.client.clientWin import ClientWin
 
 
@@ -35,8 +38,14 @@ class ClientAuthorizationWin(QWidget):
         self.setLayout(main_l)
 
     def show_orders(self):
-        if self.login_input.text() == 'Jeka_2004' and self.password_input.text() == '321':
-            self.client_win = ClientWin(self.enter_win)
+        init_db()
+        db = SessionLocal()
+
+        client_service = ClientService(db)
+        user_password = client_service.select_user_for_enter(self.login_input.text())
+        if self.password_input.text() == user_password:
+            user = client_service.select_user(self.login_input.text())
+            self.client_win = ClientWin(self.enter_win, user)
             self.client_win.show()
             self.close()
         else:
