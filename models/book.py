@@ -55,4 +55,4 @@ class Administrator(Base):
 
     id_admin = Column(Integer, primary_key=True, index=True, autoincrement=True)
     login = Column(Integer, nullable=False)
-    password = Column(Integer, nullable=False)
+    password = Column(String, nullable=False)

@@ -1,5 +1,8 @@
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import *
+
+from database import init_db, SessionLocal
+from services.book_service import AdminService
 from windows.admin.adminWin import AdminWin
 
 
@@ -36,9 +39,12 @@ class AuthorizationWin(QWidget):
         self.setLayout(main_l)
 
     def enter(self):
-        self.login = self.login_line.text()
-        self.password = self.password_line.text()
-        if self.login == 'Вова' and self.password == '123':
+        init_db()
+        db = SessionLocal()
+
+        admin_service = AdminService(db)
+        admin_password = admin_service.select_admin_for_enter(self.login_line.text())
+        if self.password_line.text() == admin_password:
             self.admin_win = AdminWin(self.enter_win)
             self.admin_win.show()
             self.close()

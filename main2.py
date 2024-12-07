@@ -1,5 +1,5 @@
 from database import SessionLocal, init_db
-from services.book_service import BookService, ClientService, OrderService, PaymentService
+from services.book_service import BookService, ClientService, OrderService, PaymentService, AdminService
 
 
 def main():
@@ -65,15 +65,12 @@ def main():
         payment_service.add_payment(payment_status='Оплачен')
         payment_service.add_payment(payment_status='Не оплачен')
 
-
-
-        books = book_service.get_all_books()
-        for book in books:
-            print(
-                f'Name: {book.book_name}'
-                f'Author: {book.author}'
-                f'Year: {book.price}'
-            )
+        admin_service = AdminService(db)
+        admin_service.add_admin(login='Вова', password='123')
+        admin_service.add_admin(login='Андрей', password='c$nWmbSF')
+        admin_service.add_admin(login='Зюзя', password='xo?3ExaT')
+        admin_service.add_admin(login='Никита', password='Bit~z~tW')
+        admin_service.add_admin(login='Женя', password='Q#GdYLrW')
 
     finally:
         db.close()

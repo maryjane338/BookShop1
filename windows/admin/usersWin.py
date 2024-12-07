@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import QIcon, QStandardItemModel, QStandardItem
+from database import SessionLocal, init_db
+from services.book_service import ClientService
 
 
 class UsersWin(QWidget):
@@ -16,26 +18,26 @@ class UsersWin(QWidget):
         self.block_btn = QPushButton('Заблокировать')
         self.block_btn.clicked.connect(self.block_user)
 
-        books = [
-            ['elenaLOVE', '+7 914 285 01 02'],
-            ['Jeka_2004', '+7 963 444 44 03'],
-            ['volchara28rus', '+7 996 129 27 10'],
-        ]
+        init_db()
+        db = SessionLocal()
 
-        view = QTableView()
-        model = QStandardItemModel()
-        model.setHorizontalHeaderLabels(['user_name', 'phone_nmber'])
-        view.setModel(model)
+        order_service = ClientService(db)
+        clients = order_service.get_all_clients()
 
-        for book in books:
-            row = [QStandardItem(field) for field in book]
-            model.appendRow(row)
+        self.view = QTableView()
+        self.model = QStandardItemModel()
+        self.model.setHorizontalHeaderLabels(['id_order', 'user_name', 'Книга', 'Номер тел.'])
+        self.view.setModel(self.model)
+
+        for client in clients:
+            row = [QStandardItem(field) for field in client]
+            self.model.appendRow(row)
 
         main_l = QVBoxLayout()
         v_l = QHBoxLayout()
         main_l.addLayout(v_l)
         v_l.addWidget(self.block_btn)
-        main_l.addWidget(view)
+        main_l.addWidget(self.view)
         self.setLayout(main_l)
 
     def block_user(self):

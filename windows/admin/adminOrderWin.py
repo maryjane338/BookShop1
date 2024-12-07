@@ -1,5 +1,7 @@
 from PyQt6.QtGui import QIcon, QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import *
+from database import SessionLocal, init_db
+from services.book_service import OrderService
 from windows.admin.UpdateOrderWin import UpdateOrderWin
 
 
@@ -19,11 +21,11 @@ class AdminOrderWin(QWidget):
         self.delete_btn = QPushButton('Удалить')
         self.delete_btn.clicked.connect(self.delete_order)
 
-        orders = [
-            ['1', 'elenaLOVE', 'Преступление и наказание', '+7 914 285 01 02', 'ул. Мухина 145, кв. 11', 'Карта', '30.11.2024'],
-            ['2', 'Jeka_2004', 'Идиот', '+7 963 444 44 03', 'ул. Ленина 22, кв. 57', 'Карта', '02.12.2024'],
-            ['3', 'volchara28rus', 'Вий', '+7 996 129 27 10', 'ул. Зейская 241, кв. 137', 'Наличные', '05.11.2024']
-        ]
+        init_db()
+        db = SessionLocal()
+
+        order_service = OrderService(db)
+        orders = order_service.get_all_orders()
 
         self.view = QTableView()
         self.model = QStandardItemModel()
@@ -49,4 +51,3 @@ class AdminOrderWin(QWidget):
     def delete_order(self):
         QMessageBox.warning(self, 'Подтверждение', 'Вы уверены, что хотите удалить запись?',
                             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-

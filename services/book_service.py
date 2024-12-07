@@ -36,8 +36,24 @@ class BookService:
         query = [query_name, query_author, query_price, query_picture]
         return query
 
+    def selected_book(self, id_book):
+        query_book = self.db.query(Book.book_name, Book.author, Book.book_picture, Book.price).\
+            filter_by(id_book=id_book).scalar()
+        query = [query_book]
+        return query
+
     def get_all_books(self):
-        books = self.db.query(Book).all()
+        query = self.db.query(Book).all()
+
+        books = []
+        for b in query:
+            book = []
+            book.append(str(b.id_book))
+            book.append(b.author)
+            book.append(b.book_name)
+            book.append(b.book_picture)
+            book.append(str(b.price))
+            books.append(book)
         return books
 
 
@@ -67,8 +83,17 @@ class ClientService:
         return user_id
 
     def get_all_clients(self):
-        books = self.db.query(Book).all()
-        return books
+        query = self.db.query(Client).all()
+
+        clients = []
+        for c in query:
+            client = []
+            client.append(str(c.id_client))
+            client.append(c.client_name)
+            client.append(str(c.phone_number))
+            client.append(c.password)
+            clients.append(client)
+        return clients
 
 
 class OrderService:
@@ -128,9 +153,19 @@ class OrderService:
         return loaded_orders
 
     def get_all_orders(self):
-        books = self.db.query(Book).all()
-        return books
+        query = self.db.query(Order).all()
 
+        orders = []
+        for o in query:
+            order = []
+            order.append(str(o.id_order))
+            order.append(str(o.client_name))
+            order.append(str(o.book_name))
+            order.append(o.address)
+            order.append(str(o.payment))
+            order.append(str(o.delivery_date))
+            orders.append(order)
+        return orders
 
 class PaymentService:
     def __init__(self, db: Session):
@@ -156,11 +191,16 @@ class AdminService:
         self.db = db
 
     def add_admin(self, login: str, password: str):
-        new_admin = Admin(
+        new_admin = Administrator(
             login=login,
             password=password
         )
         self.db.add(new_admin)
         self.db.commit()
-        self.db.refrech(new_admin)
-        
+        self.db.refresh(new_admin)
+        print(f"Added payment:{new_admin.login}")
+        return new_admin
+
+    def select_admin_for_enter(self, admin_name):
+        admin_password = self.db.query(Administrator.password).filter_by(login=admin_name).scalar()
+        return admin_password

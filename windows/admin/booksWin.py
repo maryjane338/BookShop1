@@ -1,5 +1,8 @@
 from PyQt6.QtGui import QIcon, QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import *
+
+from database import SessionLocal, init_db
+from services.book_service import BookService
 from windows.admin.booksAddOrUpdateWin import BooksAddOrUpdateWin
 
 
@@ -21,23 +24,22 @@ class BooksWin(QWidget):
         self.add_btn = QPushButton('Добавить')
         self.add_btn.clicked.connect(self.show_booksaddorupdate_win)
 
-        books = [
-            ['Дж. Д. Сэллинджер', 'Над пропастью во ржи', '800 руб.'],
-            ['Дж. Оруэл', '1984', '1000 руб.'],
-            ['Ф. Достоевский', 'Преступление и наказание', '1500 руб.'],
-            ['Э. М. Ремарк', 'Три товарища', '400 руб.'],
-            ['М. Твен', 'Приключения Гекльберри Финна', '1200 руб.'],
-            ['Н. Гоголь', 'Мёртвые Души', '500 руб.'],
-        ]
+        init_db()
+        db = SessionLocal()
 
-        view = QTableView()
-        model = QStandardItemModel()
-        model.setHorizontalHeaderLabels(['Автор', 'Название', 'Цена'])
-        view.setModel(model)
+        books_service = BookService(db)
+        books = books_service.get_all_books()
+
+        self.view = QTableView()
+        self.model = QStandardItemModel()
+        self.model.setHorizontalHeaderLabels(['id', 'Автор', 'Название', 'Картинка', 'Цена'])
+        self.view.setModel(self.model)
+
+        self.view.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
         for book in books:
             row = [QStandardItem(field) for field in book]
-            model.appendRow(row)
+            self.model.appendRow(row)
 
         main_l = QVBoxLayout()
         v_l = QHBoxLayout()
@@ -45,13 +47,24 @@ class BooksWin(QWidget):
         v_l.addWidget(self.update_btn)
         v_l.addWidget(self.delete_btn)
         v_l.addWidget(self.add_btn)
-        main_l.addWidget(view)
+        main_l.addWidget(self.view)
         self.setLayout(main_l)
 
     def show_booksaddorupdate_win(self):
         self.booksaddorupdate_win = BooksAddOrUpdateWin()
         self.booksaddorupdate_win.show()
 
+    def on_selection_changed(self):
+        indexes = self.view.selectionModel().selectedRows()
+        for index in indexes:
+            row = index.row()
+            row_data = []
+            for column in range(self.model.columnCount()):
+                cell_value = self.model.item(row, column).text()
+                row_data.append(cell_value)
+                print('fksl')
+                print(row)
+                print(row_data)
     def delete_book(self):
         QMessageBox.warning(self, 'Подтверждение', 'Вы уверены, что хотите удалить запись?',
                             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
