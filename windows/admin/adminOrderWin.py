@@ -24,17 +24,15 @@ class AdminOrderWin(QWidget):
         init_db()
         db = SessionLocal()
 
-        order_service = OrderService(db)
-        orders = order_service.get_all_orders()
+        self.order_service = OrderService(db)
 
         self.view = QTableView()
         self.model = QStandardItemModel()
-        self.model.setHorizontalHeaderLabels(['id_order', 'user_name', 'Книга', 'Номер тел.', 'Адрес доставки', 'Способ оплаты', 'Дата доставки'])
+        self.model.setHorizontalHeaderLabels(['id_order', 'user_name', 'Книга', 'Адрес доставки', 'Способ оплаты',
+                                              'Дата доставки'])
         self.view.setModel(self.model)
 
-        for order in orders:
-            row = [QStandardItem(field) for field in order]
-            self.model.appendRow(row)
+        self.load_orders()
 
         main_l = QVBoxLayout()
         v_l = QHBoxLayout()
@@ -44,10 +42,59 @@ class AdminOrderWin(QWidget):
         main_l.addWidget(self.view)
         self.setLayout(main_l)
 
+    def load_orders(self):
+        orders = self.order_service.get_all_orders()
+        for order in orders:
+            row = [QStandardItem(field) for field in order]
+            self.model.appendRow(row)
+
     def show_update_win(self):
-        self.update_order_win = UpdateOrderWin()
-        self.update_order_win.show()
+        indexes = self.view.selectionModel().selectedRows()
+        if indexes:
+            row = indexes[0].row()
+            selected_order = {  # Собираем данные выбранной строки
+                'id_order': self.model.item(row, 0).text(),
+                'user_name': self.model.item(row, 1).text(),
+                'book_name': self.model.item(row, 2).text(),
+                'address': self.model.item(row, 3).text(),
+                'payment': self.model.item(row, 4).text(),
+                'delivery_date': self.model.item(row, 5).text(),
+            }
+            self.update_order_win = UpdateOrderWin(self, selected_order)
+            self.update_order_win.show()
+        else:
+            QMessageBox.information(self, 'Информация', 'Для выбора записи, нажмите на её номер в таблице',
+                                    QMessageBox.StandardButton.Ok)
 
     def delete_order(self):
-        QMessageBox.warning(self, 'Подтверждение', 'Вы уверены, что хотите удалить запись?',
-                            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        indexes = self.view.selectionModel().selectedRows()
+        if indexes:
+            row = indexes[0].row()
+            dialog = QMessageBox()
+            dialog.setGeometry(275, 450, 750, 400)
+            dialog.setWindowTitle("Подтверждение")
+            dialog.setText(f"Вы уверены, что хотите удалить заказ?")
+            dialog.setIcon(QMessageBox.Icon.Warning)
+            dialog.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            user_response = dialog.exec()
+            if user_response == QMessageBox.StandardButton.Yes:
+                self.order_service.delete_order(self.model.item(row, 0).text())
+                QMessageBox.information(self, "Инфо", 'Заказ удалена')
+                self.model.clear()
+                self.model.setHorizontalHeaderLabels(
+                    ['id_order', 'user_name', 'Книга', 'Адрес доставки', 'Способ оплаты',
+                     'Дата доставки'])
+                self.load_orders()
+        else:
+            QMessageBox.information(self, 'Информация', 'Для удаления заказа, нажмите на его номер в таблице',
+                                    QMessageBox.StandardButton.Ok)
+
+    def closeEvent(self, event):
+        try:
+            if self.update_order_win.isVisible():
+                self.update_order_win.close()
+        except AttributeError:
+            pass
+        finally:
+            event.accept()
+

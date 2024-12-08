@@ -20,6 +20,21 @@ class BookService:
         print(f"Added book:{new_book.book_name}")
         return new_book
 
+    def update_book(self, id_book, author, book_name, book_picture, price):
+        book = self.db.query(Book).filter_by(id_book=id_book).first()
+        if book:
+            book.author = author
+            book.book_name = book_name
+            book.book_picture = book_picture
+            book.price = price
+            self.db.commit()
+            self.db.refresh(book)
+
+    def delete_book(self, id_book):
+        book = self.db.query(Book).filter_by(id_book=id_book).first()
+        self.db.delete(book)
+        self.db.commit()
+
     def select_book_query(self, book_name):
         query_book = self.db.query(Book.id_book).filter_by(book_name=book_name).scalar()
         return query_book
@@ -74,6 +89,11 @@ class ClientService:
         print(f"Added client:{new_client.client_name}")
         return new_client
 
+    def delete_client(self, id_client):
+        client = self.db.query(Client).filter_by(id_client=id_client).first()
+        self.db.delete(client)
+        self.db.commit()
+
     def select_user_for_enter(self, user_name):
         user_password = self.db.query(Client.password).filter_by(client_name=user_name).scalar()
         return user_password
@@ -114,6 +134,21 @@ class OrderService:
         self.db.refresh(new_order)
         print(f"Added order:{new_order.address}")
         return new_order
+
+    def delete_order(self, id_order):
+        order = self.db.query(Order).filter_by(id_order=id_order).first()
+        self.db.delete(order)
+        self.db.commit()
+
+    def update_order(self, id_order, book_name, address, payment, delivery_date):
+        order = self.db.query(Order).filter_by(id_order=id_order).first()
+        if order:
+            order.book_name = book_name
+            order.address = address
+            order.payment = payment
+            order.delivery_date = delivery_date
+            self.db.commit()
+            self.db.refresh(order)
 
     def load_orders_for_user(self, id_user):
         query_id = self.db.query(Order.id_order).filter_by(client_name=id_user).all()

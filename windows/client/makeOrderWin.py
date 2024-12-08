@@ -11,17 +11,13 @@ class MakeOrderWin(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(1100, 100, 500, 420)
+        self.setGeometry(1100, 200, 500, 320)
         self.setFixedSize(self.width(), self.height())
         self.setWindowIcon(QIcon('logo_pictures/window_icon.png'))
         self.setWindowTitle('Заказ')
 
-        user_name_label = QLabel('Ваш логин:')
-        self.user_name_input = QLineEdit()
         book_name_label = QLabel('Название книги:')
         self.book_name_input = QLineEdit()
-        phone_number_label = QLabel('Ваш номер телефона:')
-        self.phone_number = QLineEdit()
         user_address_label = QLabel('Адрес доставки:')
         self.user_address = QLineEdit()
         self.payment_method = QComboBox()
@@ -38,12 +34,8 @@ class MakeOrderWin(QWidget):
         self.crypto_wallet_id = QLineEdit()
 
         self.main_l = QVBoxLayout()
-        self.main_l.addWidget(user_name_label)
-        self.main_l.addWidget(self.user_name_input)
         self.main_l.addWidget(book_name_label)
         self.main_l.addWidget(self.book_name_input)
-        self.main_l.addWidget(phone_number_label)
-        self.main_l.addWidget(self.phone_number)
         self.main_l.addWidget(user_address_label)
         self.main_l.addWidget(self.user_address)
         self.main_l.addWidget(payment_method_label)
@@ -138,14 +130,43 @@ class MakeOrderWin(QWidget):
         init_db()
         db = SessionLocal()
 
-        if self.i == 1:
-            payment = 2
-        else:
-            payment = 1
-
         order_service = OrderService(db)
         book_service = BookService(db)
-        book_id = book_service.select_book_query(self.book_name_input.text())
-        order_service.add_order(client_name=self.user, book_name=book_id, address=self.user_address.text(), payment=payment, delivery_date='30.01.2025')
-        QMessageBox.information(self, 'Заказ', 'Ваш заказ успешно создан!')
-        self.close()
+
+        book = book_service.select_book_query(self.book_name_input.text())
+
+        if self.book_name_input.text() == '' or self.user_address.text() == '':
+            QMessageBox.information(self, 'Заказ', 'Вы не заполнили все поля.')
+        elif book is None:
+            QMessageBox.information(self, 'Заказ', 'Такой книги нет в нашем магазине.')
+        else:
+            if self.i == 1:
+                payment = 2
+                book_id = book_service.select_book_query(self.book_name_input.text())
+                order_service.add_order(client_name=self.user, book_name=book_id, address=self.user_address.text(),
+                                        payment=payment, delivery_date='30.01.2025')
+                QMessageBox.information(self, 'Заказ', 'Ваш заказ успешно создан!')
+                self.close()
+            elif self.i == 2:
+                if self.card_number_input.text() == '' or self.cvv_input.text() == ''\
+                        or self.card_owner_input.text() == '':
+                    QMessageBox.information(self, 'Заказ', 'Указаны не все данные карты.')
+                else:
+                    payment = 1
+                    book_id = book_service.select_book_query(self.book_name_input.text())
+                    order_service.add_order(client_name=self.user, book_name=book_id,
+                                            address=self.user_address.text(),payment=payment,
+                                            delivery_date='30.01.2025')
+                    QMessageBox.information(self, 'Заказ', 'Ваш заказ успешно создан!')
+                    self.close()
+            elif self.i == 3:
+                if self.crypto_wallet_id.text() == '':
+                    QMessageBox.information(self, 'Заказ', 'Укажите реквизиты вашего кошелька.')
+                else:
+                    payment = 1
+                    book_id = book_service.select_book_query(self.book_name_input.text())
+                    order_service.add_order(client_name=self.user, book_name=book_id,
+                                            address=self.user_address.text(),payment=payment,
+                                            delivery_date='30.01.2025')
+                    QMessageBox.information(self, 'Заказ', 'Ваш заказ успешно создан!')
+                    self.close()

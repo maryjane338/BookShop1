@@ -65,6 +65,18 @@ class AdminWin(QWidget):
             self.hide()
         elif self.win1 == 0 and self.win2 == 0 and self.win3 == 0:
             self.hide()
+        elif self.win1 == 1 and self.win2 == 1:
+            self.books_win.close()
+            self.adm_orders_win.close()
+            self.hide()
+        elif self.win2 == 1 and self.win3 == 1:
+            self.adm_orders_win.close()
+            self.users_win.close()
+            self.hide()
+        elif self.win3 == 1 and self.win1 == 1:
+            self.users_win.close()
+            self.books_win.close()
+            self.hide()
         elif self.win1 == 1:
             self.books_win.close()
             self.hide()

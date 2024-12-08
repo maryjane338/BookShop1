@@ -22,12 +22,12 @@ class AssortmentWin(QWidget):
         self.label5 = QLabel()
         self.label6 = QLabel()
 
-        self.name_label1 = QLabel('Над пропастью во ржи\nДж. Д. Сэллинджер\n800 руб.')
-        self.name_label2 = QLabel('1984\nДж. Оруэл\n1000 руб.')
-        self.name_label3 = QLabel('Преступление и наказание\nФ. Достоевский\n1500 руб.')
-        self.name_label4 = QLabel('Три товарища\nЭ. М. Ремарк\n400 руб.')
-        self.name_label5 = QLabel('Приключения Гекльберри Финна\nМ. Твен\n1200 руб.')
-        self.name_label6 = QLabel('Мёртвые Души\nН. Гоголь\n500 руб.')
+        self.name_label1 = QLabel()
+        self.name_label2 = QLabel()
+        self.name_label3 = QLabel()
+        self.name_label4 = QLabel()
+        self.name_label5 = QLabel()
+        self.name_label6 = QLabel()
 
         self.pixmap = QPixmap()
 
@@ -49,8 +49,11 @@ class AssortmentWin(QWidget):
         self.page_btn6 = QPushButton('6')
         self.page_btn6.setFixedSize(25, 25)
         self.page_btn6.clicked.connect(self.button_click6)
+        self.page_btn7 = QPushButton('7')
+        self.page_btn7.setFixedSize(25, 25)
+        self.page_btn7.clicked.connect(self.button_click7)
 
-        self.page_label = QLabel('Текущяя страница: 1')
+        self.page_label = QLabel()
 
         init_db()
         db = SessionLocal()
@@ -86,6 +89,7 @@ class AssortmentWin(QWidget):
         hl_pages.addWidget(self.page_btn4)
         hl_pages.addWidget(self.page_btn5)
         hl_pages.addWidget(self.page_btn6)
+        hl_pages.addWidget(self.page_btn7)
         hl_page_label.addWidget(self.page_label)
         main_l.addLayout(h_l1)
         main_l.addLayout(hl1_name)
@@ -139,6 +143,7 @@ class AssortmentWin(QWidget):
         self.page_btn4.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn5.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn6.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn7.setStyleSheet('QPushButton {background-color: #00000}')
 
         self.page_label.setText('Текущая страница: 1')
 
@@ -183,6 +188,7 @@ class AssortmentWin(QWidget):
         self.page_btn4.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn5.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn6.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn7.setStyleSheet('QPushButton {background-color: #00000}')
 
         self.page_label.setText('Текущая страница: 2')
 
@@ -227,6 +233,7 @@ class AssortmentWin(QWidget):
         self.page_btn4.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn5.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn6.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn7.setStyleSheet('QPushButton {background-color: #00000}')
 
         self.page_label.setText('Текущая страница: 3')
 
@@ -271,6 +278,7 @@ class AssortmentWin(QWidget):
         self.page_btn4.setStyleSheet('QPushButton {background-color: #A3C1DA}')
         self.page_btn5.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn6.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn7.setStyleSheet('QPushButton {background-color: #00000}')
 
         self.page_label.setText('Текущая страница: 4')
 
@@ -315,6 +323,7 @@ class AssortmentWin(QWidget):
         self.page_btn4.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn5.setStyleSheet('QPushButton {background-color: #A3C1DA}')
         self.page_btn6.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn7.setStyleSheet('QPushButton {background-color: #00000}')
 
         self.page_label.setText('Текущая страница: 5')
 
@@ -359,8 +368,49 @@ class AssortmentWin(QWidget):
         self.page_btn4.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn5.setStyleSheet('QPushButton {background-color: #00000}')
         self.page_btn6.setStyleSheet('QPushButton {background-color: #A3C1DA}')
+        self.page_btn7.setStyleSheet('QPushButton {background-color: #00000}')
 
         self.page_label.setText('Текущая страница: 6')
+
+    def button_click7(self):
+        book1 = self.book_service.load_book(37)
+
+        self.name_label1.setText(f'{book1[0]}\n{book1[1]}\n{book1[2]} руб.')
+        self.name_label2.setText(f'-\n-\n- руб.')
+        self.name_label3.setText(f'-\n-\n- руб.')
+        self.name_label4.setText(f'-\n-\n- руб.')
+        self.name_label5.setText(f'-\n-\n- руб.')
+        self.name_label6.setText(f'-\n-\n- руб.')
+
+        self.pixmap.load(book1[3])
+        scaled_pixmap1 = self.pixmap.scaled(150, 200)
+        self.pixmap.load('book_pictures/book.jpg')
+        scaled_pixmap2 = self.pixmap.scaled(150, 200)
+        self.pixmap.load('book_pictures/book.jpg')
+        scaled_pixmap3 = self.pixmap.scaled(150, 200)
+        self.pixmap.load('book_pictures/book.jpg')
+        scaled_pixmap4 = self.pixmap.scaled(150, 200)
+        self.pixmap.load('book_pictures/book.jpg')
+        scaled_pixmap5 = self.pixmap.scaled(150, 200)
+        self.pixmap.load('book_pictures/book.jpg')
+        scaled_pixmap6 = self.pixmap.scaled(150, 200)
+
+        self.label1.setPixmap(scaled_pixmap1)
+        self.label2.setPixmap(scaled_pixmap2)
+        self.label3.setPixmap(scaled_pixmap3)
+        self.label4.setPixmap(scaled_pixmap4)
+        self.label5.setPixmap(scaled_pixmap5)
+        self.label6.setPixmap(scaled_pixmap6)
+
+        self.page_btn1.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn2.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn3.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn4.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn5.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn6.setStyleSheet('QPushButton {background-color: #00000}')
+        self.page_btn7.setStyleSheet('QPushButton {background-color: #A3C1DA}')
+
+        self.page_label.setText('Текущая страница: 7')
 
 
 def main():

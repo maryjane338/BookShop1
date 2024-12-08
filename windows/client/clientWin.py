@@ -84,6 +84,15 @@ class ClientWin(QWidget):
             self.orders_win.close()
             self.assortment.close()
             self.hide()
+        elif self.win1 == 1:
+            self.assortment.close()
+            self.hide()
+        elif self.win2 == 1:
+            self.make_order_win.close()
+            self.hide()
+        elif self.win3 == 1:
+            self.orders_win.close()
+            self.hide()
         self.enter_win.show()
 
     def closeEvent(self, event):
