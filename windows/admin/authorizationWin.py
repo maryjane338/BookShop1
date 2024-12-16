@@ -1,6 +1,5 @@
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import *
-
 from database import init_db, SessionLocal
 from services.book_service import AdminService
 from windows.admin.adminWin import AdminWin

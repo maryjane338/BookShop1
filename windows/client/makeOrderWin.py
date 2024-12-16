@@ -2,6 +2,7 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import *
 from database import SessionLocal, init_db
 from services.book_service import OrderService, BookService
+from datetime import date
 
 
 class MakeOrderWin(QWidget):
@@ -144,7 +145,7 @@ class MakeOrderWin(QWidget):
                 payment = 2
                 book_id = book_service.select_book_query(self.book_name_input.text())
                 order_service.add_order(client_name=self.user, book_name=book_id, address=self.user_address.text(),
-                                        payment=payment, delivery_date='30.01.2025')
+                                        payment=payment, delivery_date=str(date.today()))
                 QMessageBox.information(self, 'Заказ', 'Ваш заказ успешно создан!')
                 self.close()
             elif self.i == 2:
@@ -156,7 +157,7 @@ class MakeOrderWin(QWidget):
                     book_id = book_service.select_book_query(self.book_name_input.text())
                     order_service.add_order(client_name=self.user, book_name=book_id,
                                             address=self.user_address.text(),payment=payment,
-                                            delivery_date='30.01.2025')
+                                            delivery_date=str(date.today()))
                     QMessageBox.information(self, 'Заказ', 'Ваш заказ успешно создан!')
                     self.close()
             elif self.i == 3:
@@ -167,6 +168,6 @@ class MakeOrderWin(QWidget):
                     book_id = book_service.select_book_query(self.book_name_input.text())
                     order_service.add_order(client_name=self.user, book_name=book_id,
                                             address=self.user_address.text(),payment=payment,
-                                            delivery_date='30.01.2025')
+                                            delivery_date=str(date.today()))
                     QMessageBox.information(self, 'Заказ', 'Ваш заказ успешно создан!')
                     self.close()

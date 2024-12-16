@@ -1,6 +1,5 @@
 from PyQt6.QtGui import QIcon, QStandardItemModel, QStandardItem
 from PyQt6.QtWidgets import *
-
 from database import SessionLocal, init_db
 from services.book_service import BookService
 from windows.admin.booksAddOrUpdateWin import BooksAddOrUpdateWin

@@ -1,6 +1,5 @@
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import *
-
 from database import SessionLocal
 from services.book_service import BookService
 

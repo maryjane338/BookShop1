@@ -59,7 +59,7 @@ def main():
 
         order_service = OrderService(db)
         order_service.add_order(client_name=1, book_name=7, address='ул. Мухина, д. 76, кв. 40', payment=1,
-                                delivery_date='30.11.2024')
+                                delivery_date='2024-11-30')
 
         payment_service = PaymentService(db)
         payment_service.add_payment(payment_status='Оплачен')
